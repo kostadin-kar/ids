@@ -1,0 +1,14 @@
+id
+Headline
+Description
+Story
+Author
+Published
+Rating
+
+1) Controller and dependencies in container
+2) service calling ids
+3) ids implementation
+4) db creation
+5) intruder implementation
+6) ui features

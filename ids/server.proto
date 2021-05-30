@@ -1,0 +1,13 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+
+package protos;
+
+message InfoRequest {
+    string agent = 1;
+    double timestamp = 2;
+}
+
+service RequestsReceiverService {
+    rpc SendRequestInfo(InfoRequest) returns (google.protobuf.Empty) {}
+}
