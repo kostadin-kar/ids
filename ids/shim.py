@@ -16,7 +16,7 @@ class RequestsReceiverService(RequestsReceiverServiceServicer):
         print(request)
         while True:
             if not queue.full():
-                queue.put({request.agent, request.timestamp})
+                queue.put_nowait({'agent': request.agent, 'timestamp': request.timestamp})
                 return empty_pb2.Empty()
                 break
             else:
@@ -35,16 +35,18 @@ class Transformer(object):
 
         while True:
             if not queue.empty():
-                item = queue.get()
+                item = queue.get_nowait()
+                print(item)
                 if len(buffer) == 0:
                     buffer.append(item)
-                elif int(buffer[0].timestamp) == int(item.timestamp):
+                elif int(buffer[0].get('timestamp')) == int(item.get('timestamp')):
                     buffer.append(item)
                 else:
                     ips = set()
                     for b in buffer:
-                        ips.add(b.agent)
+                        ips.add(b.get('agent'))
 
+                    print('Notifying observer')
                     self._observer.notify([[len(ips), len(buffer)]])
                     buffer.clear()
                     buffer.append(item)

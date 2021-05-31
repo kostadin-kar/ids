@@ -7,10 +7,18 @@ app = Flask(__name__)
 
 trainedSOM = None
 transformer = None
-globalState = None
+globalState = [-1]
+
+
+@app.route("/state", methods=['GET'])
+@app.route("/", methods=['GET'])
+def get_stories():
+    print('Global state api = ' + str(globalState))
+    return jsonify({'global_state': globalState})
 
 
 def load_engine():
+    global globalState
     return Observer(globalState)
 
 

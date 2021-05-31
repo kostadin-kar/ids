@@ -39,7 +39,9 @@ class StoryService:
         client.SendRequestInfo(
             InfoRequest(agent=agent, timestamp=time.time())
         )
-
+        client.SendRequestInfo(
+            InfoRequest(agent=agent, timestamp=time.time())
+        )
         # self.connection.request('POST', '/analyze', json_body, self.headers)
         # response = self.connection.getresponse()
         return ["a", "n"]
