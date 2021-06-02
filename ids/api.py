@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-import shim
+import grpc_transformer
 from mapper import Observer
 
 app = Flask(__name__)
@@ -13,7 +13,6 @@ globalState = [-1]
 @app.route("/state", methods=['GET'])
 @app.route("/", methods=['GET'])
 def get_stories():
-    print('Global state api = ' + str(globalState))
     return jsonify({'global_state': globalState})
 
 
@@ -23,7 +22,7 @@ def load_engine():
 
 
 def start_shim(observer):
-    shim.serve(observer)
+    grpc_transformer.serve(observer)
 
 
 def main():

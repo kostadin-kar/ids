@@ -19,7 +19,6 @@ class Observer(object):
         self._global_state = global_state
 
     def notify(self, request):
-        print('Received ' + str(request))
         activation = self._mini_som.activation_response(request)
         index = np.unravel_index(activation.argmax(), activation.shape)
         prediction = self._kmeans.predict([index])
@@ -32,6 +31,3 @@ class Observer(object):
             self._global_state[0] = 2
         else:
             print('Unrecognized cluster')
-        print('Global state consumer = ' + str(self._global_state))
-
-
