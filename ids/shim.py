@@ -18,7 +18,6 @@ class RequestsReceiverService(RequestsReceiverServiceServicer):
             if not queue.full():
                 queue.put_nowait({'agent': request.agent, 'timestamp': request.timestamp})
                 return empty_pb2.Empty()
-                break
             else:
                 time.sleep(1)
 
@@ -71,12 +70,5 @@ def serve(observer):
     transformer = Transformer(observer)
 
     executor = ThreadPoolExecutor(max_workers=2)
-    # with ThreadPoolExecutor(max_workers=2) as executor:
     executor.submit(init_grpc_server)
     executor.submit(transformer.transform)
-
-
-# if __name__ == "__main__":
-#     serve()
-
-# extensions for the future: different request methods,
