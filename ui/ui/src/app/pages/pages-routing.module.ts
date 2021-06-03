@@ -2,21 +2,35 @@ import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
 import { PagesComponent } from './pages.component';
-import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
-import { WelcomeComponent } from './miscellaneous/welcome/welcome.component';
+import { WelcomeComponent } from './welcome/welcome.component';
+import { IntruderComponent } from './intruder/intruder.component';
+import { AlertComponent } from './ids/alert.component';
+import { StoryComponent } from './story/story.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [{
   path: '',
   component: PagesComponent,
   children: [
     {
-      path: 'layout',
-      loadChildren: () => import('./layout/layout.module')
-        .then(m => m.LayoutModule),
+      path: 'main',
+      component: WelcomeComponent
+    },
+    {
+      path: 'intruder',
+      component: IntruderComponent,
+    },
+    {
+      path: 'ids',
+      component: AlertComponent,
+    },
+    {
+      path: 'story',
+      component: StoryComponent
     },
     {
       path: '',
-      redirectTo: 'layout',
+      redirectTo: 'main',
       pathMatch: 'full',
     },
     {
