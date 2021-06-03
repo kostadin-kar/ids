@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-lg-12">
+
+    <nb-card>
+      <nb-card-header>Control requests amount</nb-card-header>
+      <nb-card-body>
+        <div class="buttons-row">
+          The 'Intruder service' section from the project is responsible for simulating heavier trafic
+          towards the story service API than what the AI model is trained to recognize as normal. Starting
+          the process essentialy means forging HTTP user agents headers and producing greater magnitude of
+          requests to try and stress out the 'Intrusion detection service'  
+        </div>
+      </nb-card-body>
+    </nb-card>
+
+    <nb-card>
+      <nb-card-header>Start or stop requests flow</nb-card-header>
+      <nb-card-body>
+        <div class="buttons-row">
+          <button nbButton status="warning" (click)="startAttack()">Start</button>
+          <button nbButton status="primary" (click)="stopAttack()">Stop</button>
+        </div>
+      </nb-card-body>
+    </nb-card>
+
+  </div>
+</div>
