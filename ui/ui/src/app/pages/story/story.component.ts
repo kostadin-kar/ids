@@ -1,50 +1,46 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LocalDataSource } from 'ng2-smart-table';
-import { Subscription } from 'rxjs';
+import { Subscription, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'ngx-smart-table',
   templateUrl: './story.component.html',
   styleUrls: ['./story.component.scss'],
 })
-export class StoryComponent implements OnDestroy {
+export class StoryComponent implements OnDestroy, OnInit {
 
   settings = {
+    actions: {
+      edit: false
+    },
     add: {
       addButtonContent: '<i class="nb-plus"></i>',
       createButtonContent: '<i class="nb-checkmark"></i>',
       cancelButtonContent: '<i class="nb-close"></i>',
+      confirmCreate: true
     },
-    // edit: {
-    //   editButtonContent: '<i class="nb-edit"></i>',
-    //   saveButtonContent: '<i class="nb-checkmark"></i>',
-    //   cancelButtonContent: '<i class="nb-close"></i>',
-    // },
     delete: {
       deleteButtonContent: '<i class="nb-trash"></i>',
       confirmDelete: true,
     },
     columns: {
-      id: {
-        title: 'ID',
-        type: 'number',
-      },
-      headline: {
-        title: 'Headline',
+      author: {
+        title: 'Author',
         type: 'string',
       },
       description: {
         title: 'Description',
         type: 'string',
       },
-      story: {
-        title: 'Story',
+      headline: {
+        title: 'Headline',
         type: 'string',
       },
-      author: {
-        title: 'Author',
-        type: 'string',
+      id: {
+        title: 'ID',
+        type: 'number',
       },
       published: {
         title: 'Published on',
@@ -53,6 +49,10 @@ export class StoryComponent implements OnDestroy {
       rating: {
         title: 'Rating',
         type: 'number',
+      },
+      story: {
+        title: 'Story',
+        type: 'string',
       }
     },
   };
@@ -61,12 +61,14 @@ export class StoryComponent implements OnDestroy {
   subscription: Subscription;
 
   constructor(private http: HttpClient) {
+  }
 
-    this.subscription = this.http.get('127.0.0.1:5001/stories')
-      .subscribe(response => {
-        const stories: any[] = [response];
-        this.source.load(stories);
-      }, error => console.log(error));
+  ngOnInit() {
+    this.subscription = this.http.get<string>('http://127.0.0.1:5001/stories')
+    .subscribe(jsonArr => {
+      const stories: any = jsonArr;
+      this.source.load(stories);
+    }, error => console.log(error));
   }
 
   ngOnDestroy() {
@@ -77,6 +79,12 @@ export class StoryComponent implements OnDestroy {
 
   onDeleteConfirm(event): void {
     if (window.confirm('Are you sure you want to delete?')) {
+      this.http.delete(`http://127.0.0.1:5001/stories/${event.data.id}`)
+        .pipe(catchError(this.handleError))
+        .subscribe()
+
+      this.source.remove(event.data)
+      
       event.confirm.resolve();
     } else {
       event.confirm.reject();
@@ -84,6 +92,22 @@ export class StoryComponent implements OnDestroy {
   }
 
   onCreateConfirm(event): void {
+    this.http.post(`http://127.0.0.1:5001/stories`, event.newData)
+      .pipe(tap(_ => console.log('Added new story')), catchError(this.handleError))
+      .subscribe();
+    
+    event.confirm.resolve();
+  }
 
+  private handleError(error: HttpErrorResponse) {
+    if (error.status === 0) {
+      console.error('An error occurred:', error.error);
+    } else {
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${error.error}`);
+    }
+    return throwError(
+      'Something bad happened; please try again later.');
   }
 }

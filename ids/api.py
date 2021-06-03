@@ -1,8 +1,11 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
+
 import grpc_transformer
 from mapper import Observer
 
 app = Flask(__name__)
+CORS(app)
 
 
 trainedSOM = None

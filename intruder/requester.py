@@ -5,6 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 import time
 
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 HOST = '127.0.0.1'
 PORT = 5001
@@ -15,6 +16,7 @@ with open('./agents.txt') as f:
 executor = ThreadPoolExecutor(max_workers=3)
 
 app = Flask(__name__)
+CORS(app)
 
 
 @app.route("/dashboard", methods=['GET'])

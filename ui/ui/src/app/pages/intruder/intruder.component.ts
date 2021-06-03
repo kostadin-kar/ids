@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { throwError } from 'rxjs/internal/observable/throwError';
 
 @Component({
@@ -13,17 +13,21 @@ export class IntruderComponent {
   constructor(private http: HttpClient) {}
 
   startAttack() {
-    return this.http.post('127.0.0.1:5002/view?action=start', null)
+    return this.http.post('http://127.0.0.1:5002/dashboard?action=start', null)
       .pipe(
+        tap(_ => console.log('attack started')),
         catchError(this.handleError)
       )
+      .subscribe()
   }
 
   stopAttack() {
-    return this.http.post('127.0.0.1:5002/view?action=stop', null)
+    return this.http.post('http://127.0.0.1:5002/dashboard?action=stop', null)
       .pipe(
+        tap(_ => console.log('attack stopped')),
         catchError(this.handleError)
       )
+      .subscribe()
   }
 
   private handleError(error: HttpErrorResponse) {

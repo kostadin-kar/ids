@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs/Rx';
+import { interval, Subscription } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'ngx-alert',
@@ -17,14 +18,33 @@ export class AlertComponent implements OnDestroy {
   }
 
   startReceivingAlerts() {
-    this.subscription = Observable.interval(5000).subscribe(__ => {
-      const response = this.http.get('127.0.0.1:5000/view');
-      this.responses.push(response);
-      this.responses = this.responses.slice(-3);
-    }, error => console.log(error))
+    if (this.subscription) {
+      return;
+    }
+
+    console.log('starting')
+    this.subscription = interval(3000).pipe(
+      tap(_ => {
+        console.log("trying")
+        const response = this.http.get('http://127.0.0.1:5000/state')
+          .subscribe(alert => {
+            const res: any = alert;
+            const status = res.global_state[0];
+            console.log(alert)
+            this.responses.push(status);
+            this.responses = this.responses.slice(-3);
+
+            if (response) {
+              response.unsubscribe();
+            }
+          }, error => console.log(error));
+      })
+    ).subscribe();
   }
 
   stopReceivingAlerts() {
+    console.log('stopping')
+
     if (this.subscription) {
       this.subscription.unsubscribe();
     }

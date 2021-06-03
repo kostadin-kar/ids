@@ -52,5 +52,5 @@ class RepositoryLocal(RepositoryBase):
 
     def delete_story(self, story_id):
         for i in range(len(self._data)):
-            if self._data[i].get('id') == story_id:
-                self._data.pop(i)
+            if self._data[i-1].get('id') == story_id:
+                self._data.pop(i-1)
