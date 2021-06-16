@@ -7,5 +7,3 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'ids', 'protos'))
 import dependencyConfig
 import storyService
 import storyRepository
-
-from protos.server_pb2_grpc import TransformerShimStub

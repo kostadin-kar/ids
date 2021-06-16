@@ -1,8 +1,11 @@
-from flask import Flask, jsonify, request
-import shim
+from flask import Flask, jsonify
+from flask_cors import CORS
+
+import grpc_transformer
 from mapper import Observer
 
 app = Flask(__name__)
+CORS(app)
 
 
 trainedSOM = None
@@ -13,7 +16,6 @@ globalState = [-1]
 @app.route("/state", methods=['GET'])
 @app.route("/", methods=['GET'])
 def get_stories():
-    print('Global state api = ' + str(globalState))
     return jsonify({'global_state': globalState})
 
 
@@ -23,7 +25,7 @@ def load_engine():
 
 
 def start_shim(observer):
-    shim.serve(observer)
+    grpc_transformer.serve(observer)
 
 
 def main():

@@ -1,11 +1,13 @@
 from flask import Flask, jsonify, request
 from flask_injector import FlaskInjector
 from injector import inject
+from flask_cors import CORS
 
 from dependencyConfig import configure
 from storyService import StoryService
 
 app = Flask(__name__)
+CORS(app)
 
 
 @inject
@@ -19,22 +21,26 @@ def get_stories(service: StoryService):
 @inject
 @app.route("/stories/<story_id>", methods=['GET'])
 def get_story(story_id, service: StoryService):
-    story = service.get_story(story_id)
+    story = service.get_story(int(story_id))
     return jsonify(story)
 
 
 @inject
 @app.route("/stories", methods=['POST'])
 def create_story(service: StoryService):
-    result = service.create_story({})
-    return jsonify(result)
+    print('POST request')
+    body = request.json
+    service.create_story(body)
+    return jsonify(202)
 
 
 @inject
 @app.route("/stories/<story_id>", methods=['DELETE'])
 def delete_story(story_id, service: StoryService):
-    result = service.delete_story(story_id)
-    return result
+    print('delete request')
+
+    service.delete_story(int(story_id))
+    return jsonify(201)
 
 
 FlaskInjector(app=app, modules=[configure])

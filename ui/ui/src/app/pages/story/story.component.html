@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-lg-12">
+
+    <nb-card>
+      <nb-card-header>Story service description</nb-card-header>
+      <nb-card-body>
+        <div class="buttons-row">
+          The 'Story service' section from the project is a minimalistic example of a REST Web API application
+          created for demonstrative purposes. It provides functionality to see, create and delete records in
+          a table by making HTTP requests to the backend server. It forwards traffic to the 'Intrusion detection
+          system' and is under its supervision
+        </div>
+      </nb-card-body>
+    </nb-card>
+
+    <nb-card>
+      <nb-card-header>Story catalog</nb-card-header>
+      <nb-card-body>
+        <ng2-smart-table [settings]="settings" [source]="source"
+          (deleteConfirm)="onDeleteConfirm($event)" (createConfirm)="onCreateConfirm($event)">
+        </ng2-smart-table>
+      </nb-card-body>
+    </nb-card>
+
+  </div>
+</div>
+

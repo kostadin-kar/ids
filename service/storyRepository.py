@@ -1,4 +1,3 @@
-# interface and sory entity, other class will be sql implementation detail
 from abc import ABC, abstractmethod
 
 
