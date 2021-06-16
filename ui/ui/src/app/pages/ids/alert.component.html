@@ -31,7 +31,7 @@
         <nb-card-body>
           <ng-container *ngFor="let response of responses">
             <nb-alert *ngIf="response == 0" status="primary">Everything under control</nb-alert>
-            <nb-alert *ngIf="response == 1" status="warning">Noticing abnormal trafic flow!</nb-alert>
+            <nb-alert *ngIf="response == 1" status="warning">Noticing abnormal traffic flow!</nb-alert>
             <nb-alert *ngIf="response == 2" status="danger">There's a breach in progress!</nb-alert>
           </ng-container>
         </nb-card-body>

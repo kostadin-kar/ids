@@ -15,4 +15,4 @@ RUN python -m grpc_tools.protoc -I ./ --python_out=. --grpc_python_out=. ./serve
 COPY ./service ./
 EXPOSE 5001
 EXPOSE 50051
-CMD ["flask", "run", "--host", "0.0.0.0"]
+CMD ["flask", "run", "--host", "0.0.0.0", "--port", "5001"]
